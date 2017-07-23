@@ -14,19 +14,19 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
      * @return string Syntax mode type
      */
     public function getType() {
-        return 'FIXME: container|baseonly|formatting|substition|protected|disabled|paragraphs';
+        return 'substition';
     }
     /**
      * @return string Paragraph type
      */
     public function getPType() {
-        return 'FIXME: normal|block|stack';
+        return 'block';
     }
     /**
      * @return int Sort order - Low numbers go before high numbers
      */
     public function getSort() {
-        return FIXME;
+        return 500;
     }
 
     /**
@@ -35,13 +35,8 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
      * @param string $mode Parser mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<FIXME>',$mode,'plugin_fksyearlistresults');
-//        $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_fksyearlistresults');
+        $this->Lexer->addSpecialPattern('<fksyearlistresults>',$mode,'plugin_fksyearlistresults');
     }
-
-//    public function postConnect() {
-//        $this->Lexer->addExitPattern('</FIXME>','plugin_fksyearlistresults');
-//    }
 
     /**
      * Handle matches of the fksyearlistresults syntax
@@ -53,7 +48,31 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
      * @return array Data for the renderer
      */
     public function handle($match, $state, $pos, Doku_Handler $handler){
+        // Dokuwiki configuration for datadir value
+        global $conf;
+
+        // Search all pages
+        search($search_results, $conf['datadir'], 'search_allpages', array(), "", -1);
+
+        // Extract data
         $data = array();
+        foreach ($search_results as $page) {
+            // Better one additional preg_match, than 4 useless...
+            if (!preg_match($this->getConf('id_filter'), $page['id'])) continue;
+
+            if (preg_match($this->getConf('id_first_half'), $page['id'], $m)) {
+                $data[$m[1]]['first'] = true;
+            } elseif (preg_match($this->getConf('id_second_half'), $page['id'], $m)) {
+                $data[$m[1]]['second'] = true;
+            } elseif (preg_match($this->getConf('id_final'), $page['id'], $m)) {
+                $data[$m[1]]['final'] = true;
+            } elseif (preg_match($this->getConf('id_series'), $page['id'], $m)) {
+                $data[$m[1]]['series'][$m[2]] = true;
+            }
+        }
+
+        // Order data
+        ksort($data, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $data;
     }
