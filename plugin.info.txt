@@ -1,0 +1,7 @@
+base   fksyearlistresults
+author Štěpán Stenchlák
+email  stenchlak@fykos.cz
+date   2017-07-23
+name   fksyearlistresults plugin
+desc   Shows list of all year results at http://fykos.cz/poradi/start
+url    https://github.com/sstenchlak/fykosak-dokuwiki-plugin-fksyearlistresults
