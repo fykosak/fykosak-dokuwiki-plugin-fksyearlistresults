@@ -35,7 +35,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
      * @param string $mode Parser mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<fksyearlistresults>',$mode,'plugin_fksyearlistresults');
+        $this->Lexer->addSpecialPattern('<fksyearlistresults.*?>',$mode,'plugin_fksyearlistresults');
     }
 
     /**
@@ -88,8 +88,60 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
     public function render($mode, Doku_Renderer $renderer, $data) {
         if($mode != 'xhtml') return false;
 
+        $renderer->doc .= "<div class=\"row\">";
+
+        // For each year from first_year
+        foreach ($data as $year => $data_year) {
+            $renderer->doc .= "<div class=\"mb-3 col-lg-6 col-xl-4 col-md-6 col-sm-12 col-xs-12\">";
+
+            // Title
+            $renderer->doc .= "<h2>" . sprintf($this->getLang('title'),$year,$this->romanic_number($year)) . "</h2>";
+
+            if (isset($data_year['first'])) $renderer->doc .= "<p><a href=\"" . sprintf($this->getConf('url_first_half'),$year) . "\">" . $this->getLang('first_half') . "</a></p>";
+            if (isset($data_year['second'])) $renderer->doc .= "<p><a href=\"" . sprintf($this->getConf('url_second_half'),$year) . "\">" . $this->getLang('second_half') . "</a></p>";
+            if (isset($data_year['final'])) $renderer->doc .= "<p><a href=\"" . sprintf($this->getConf('url_final'),$year) . "\">" . $this->getLang('final') . "</a></p>";
+
+            // Series in list
+            $renderer->doc .= "<ul>";
+            foreach ($data_year['series'] as $series => $data_year_series) {
+                $renderer->doc .= "<li><a href=\"" . sprintf($this->getConf('url_series'),$year, $series) . "\">" . sprintf($this->getLang('series'),$series) . "</a></li>";
+            }
+            $renderer->doc .= "</ul>";
+
+
+            $renderer->doc .= "</div>";
+        }
+
+        $renderer->doc .= "</div>";
+
         return true;
+    }
+
+    /**
+     * transform ordinary numbers to Roman numerals
+     *
+     * @param $integer Number to convert
+     * @param bool $upcase
+     * @return string Result
+     */
+    private function romanic_number($integer, $upcase = true)
+    {
+        $table = array('M'=>1000, 'CM'=>900, 'D'=>500, 'CD'=>400, 'C'=>100, 'XC'=>90, 'L'=>50, 'XL'=>40, 'X'=>10, 'IX'=>9, 'V'=>5, 'IV'=>4, 'I'=>1);
+        $return = '';
+        while($integer > 0)
+        {
+            foreach($table as $rom=>$arb)
+            {
+                if($integer >= $arb)
+                {
+                    $integer -= $arb;
+                    $return .= $rom;
+                    break;
+                }
+            }
+        }
+
+        return $return;
     }
 }
 
-// vim:ts=4:sw=4:et:
