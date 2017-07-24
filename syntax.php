@@ -11,6 +11,14 @@ if (!defined('DOKU_INC')) die();
 
 class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
     /**
+     * Constants in data array keys
+     */
+    const DATA_ARRAY_SERIES = 0;
+    const DATA_ARRAY_FIRST = 1;
+    const DATA_ARRAY_SECOND = 2;
+    const DATA_ARRAY_FINAL = 3;
+
+    /**
      * @return string Syntax mode type
      */
     public function getType() {
@@ -61,13 +69,13 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
             if (!preg_match($this->getConf('id_filter'), $page['id'])) continue;
 
             if (preg_match($this->getConf('id_first_half'), $page['id'], $m)) {
-                $data[$m[1]]['first'] = true;
+                $data[$m[1]][self::DATA_ARRAY_FIRST] = true;
             } elseif (preg_match($this->getConf('id_second_half'), $page['id'], $m)) {
-                $data[$m[1]]['second'] = true;
+                $data[$m[1]][self::DATA_ARRAY_SECOND] = true;
             } elseif (preg_match($this->getConf('id_final'), $page['id'], $m)) {
-                $data[$m[1]]['final'] = true;
+                $data[$m[1]][self::DATA_ARRAY_FINAL] = true;
             } elseif (preg_match($this->getConf('id_series'), $page['id'], $m)) {
-                $data[$m[1]]['series'][$m[2]] = true;
+                $data[$m[1]][self::DATA_ARRAY_SERIES][$m[2]] = true;
             }
         }
 
@@ -97,13 +105,13 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
             // Title
             $renderer->doc .= '<h2>' . sprintf($this->getLang('title'),$year,$this->romanicNumber($year)) . '</h2>';
 
-            if (isset($data_year['first'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_first_half'),$year) . '">' . $this->getLang('first_half') . '</a></p>';
-            if (isset($data_year['second'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_second_half'),$year) . '">' . $this->getLang('second_half') . '</a></p>';
-            if (isset($data_year['final'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_final'),$year) . '">' . $this->getLang('final') . '</a></p>';
+            if (isset($data_year[self::DATA_ARRAY_FIRST])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_first_half'),$year) . '">' . $this->getLang('first_half') . '</a></p>';
+            if (isset($data_year[self::DATA_ARRAY_SECOND])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_second_half'),$year) . '">' . $this->getLang('second_half') . '</a></p>';
+            if (isset($data_year[self::DATA_ARRAY_FINAL])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_final'),$year) . '">' . $this->getLang('final') . '</a></p>';
 
             // Series in list
             $renderer->doc .= '<ul>';
-            foreach ($data_year['series'] as $series => $data_year_series) {
+            foreach ($data_year[self::DATA_ARRAY_SERIES] as $series => $data_year_series) {
                 $renderer->doc .= '<li><a href="' . sprintf($this->getConf('url_series'),$year, $series) . '">' . sprintf($this->getLang('series'),$series) . '</a></li>';
             }
             $renderer->doc .= '</ul>';
