@@ -67,7 +67,8 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
             } elseif (preg_match($this->getConf('id_final'), $page['id'], $m)) {
                 $data[$m[1]]['final'] = true;
             } elseif (preg_match($this->getConf('id_series'), $page['id'], $m)) {
-                $data[$m[1]]['series'][$m[2]] = true;
+                // Suppose that there is 1 to N series.
+                if (!isset($data[$m[1]]['series']) || $data[$m[1]]['series'] < $m[2] ) $data[$m[1]]['series'] = $m[2];
             }
         }
 
@@ -103,7 +104,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
 
             // Series in list
             $renderer->doc .= '<ul>';
-            foreach ($data_year['series'] as $series => $data_year_series) {
+            for ($series = 1; $series <= $data_year['series']; $series++) {
                 $renderer->doc .= '<li><a href="' . sprintf($this->getConf('url_series'),$year, $series) . '">' . sprintf($this->getLang('series'),$series) . '</a></li>';
             }
             $renderer->doc .= '</ul>';
