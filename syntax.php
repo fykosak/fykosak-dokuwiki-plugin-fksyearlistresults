@@ -92,7 +92,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
 
         // For each year from first_year
         foreach ($data as $year => $data_year) {
-            $renderer->doc .= "<div class=\"mb-3 col-lg-6 col-xl-4 col-md-6 col-sm-12 col-xs-12\">";
+            $renderer->doc .= '<div class="mb-3 col-lg-3 col-md-4 col-sm-6 col-xs-12">';
 
             // Title
             $renderer->doc .= '<h2>' . sprintf($this->getLang('title'),$year,$this->romanicNumber($year)) . '</h2>';
