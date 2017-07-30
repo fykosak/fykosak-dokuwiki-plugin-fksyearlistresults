@@ -97,7 +97,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
             $renderer->doc .= '<div class="mb-3 col-lg-3 col-md-4 col-sm-6 col-xs-12">';
 
             // Title
-            $renderer->doc .= '<h2>' . sprintf($this->getLang('title'),$year,$this->romanicNumber($year)) . '</h2>';
+            $renderer->doc .= '<h2>' . sprintf($this->getLang('title'),$year) . '</h2>';
 
             if (isset($data_year['first'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($conf['lang'] . '_' . 'url_first_half'),$year) . '">' . $this->getLang('first_half') . '</a></p>';
             if (isset($data_year['second'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($conf['lang'] . '_' . 'url_second_half'),$year) . '">' . $this->getLang('second_half') . '</a></p>';
@@ -117,33 +117,6 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '</div>';
 
         return true;
-    }
-
-    /**
-     * Transform ordinary numbers to Roman numerals
-     *
-     * @param $integer Number to convert
-     * @param bool $upcase
-     * @return string Result
-     */
-    private function romanicNumber($integer, $upcase = true)
-    {
-        $table = ['M'=>1000, 'CM'=>900, 'D'=>500, 'CD'=>400, 'C'=>100, 'XC'=>90, 'L'=>50, 'XL'=>40, 'X'=>10, 'IX'=>9, 'V'=>5, 'IV'=>4, 'I'=>1];
-        $return = '';
-        while($integer > 0)
-        {
-            foreach($table as $rom=>$arb)
-            {
-                if($integer >= $arb)
-                {
-                    $integer -= $arb;
-                    $return .= $rom;
-                    break;
-                }
-            }
-        }
-
-        return $return;
     }
 
 }

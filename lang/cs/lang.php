@@ -5,7 +5,7 @@
  * @author Štěpán Stenchlák <stenchlak@fykos.cz>
  */
 
-$lang['title'] = 'Ročník %2$s';
+$lang['title'] = '%d. ročník';
 $lang['first_half'] = 'I. pololetní výsledková listina';
 $lang['second_half'] = 'II. pololetní výsledková listina';
 $lang['final'] = 'Konečná výsledková listina';
