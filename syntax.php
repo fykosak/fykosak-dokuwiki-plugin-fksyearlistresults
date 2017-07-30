@@ -58,15 +58,15 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
         $data = [];
         foreach ($search_results as $page) {
             // Better one additional preg_match, than 4 useless...
-            if (!preg_match($this->getConf('id_filter'), $page['id'])) continue;
+            if (!preg_match($this->getConf($conf['lang'] . '_' . 'id_filter'), $page['id'])) continue;
 
-            if (preg_match($this->getConf('id_first_half'), $page['id'], $m)) {
+            if (preg_match($this->getConf($conf['lang'] . '_' . 'id_first_half'), $page['id'], $m)) {
                 $data[$m[1]]['first'] = true;
-            } elseif (preg_match($this->getConf('id_second_half'), $page['id'], $m)) {
+            } elseif (preg_match($this->getConf($conf['lang'] . '_' . 'id_second_half'), $page['id'], $m)) {
                 $data[$m[1]]['second'] = true;
-            } elseif (preg_match($this->getConf('id_final'), $page['id'], $m)) {
+            } elseif (preg_match($this->getConf($conf['lang'] . '_' . 'id_final'), $page['id'], $m)) {
                 $data[$m[1]]['final'] = true;
-            } elseif (preg_match($this->getConf('id_series'), $page['id'], $m)) {
+            } elseif (preg_match($this->getConf($conf['lang'] . '_' . 'id_series'), $page['id'], $m)) {
                 $data[$m[1]]['series'][$m[2]] = true;
             }
         }
@@ -86,6 +86,8 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
      * @return bool If rendering was successful.
      */
     public function render($mode, Doku_Renderer $renderer, $data) {
+        global $conf;
+
         if($mode != 'xhtml') return false;
 
         $renderer->doc .= '<div class="row">';
@@ -97,14 +99,14 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
             // Title
             $renderer->doc .= '<h2>' . sprintf($this->getLang('title'),$year,$this->romanicNumber($year)) . '</h2>';
 
-            if (isset($data_year['first'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_first_half'),$year) . '">' . $this->getLang('first_half') . '</a></p>';
-            if (isset($data_year['second'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_second_half'),$year) . '">' . $this->getLang('second_half') . '</a></p>';
-            if (isset($data_year['final'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf('url_final'),$year) . '">' . $this->getLang('final') . '</a></p>';
+            if (isset($data_year['first'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($conf['lang'] . '_' . 'url_first_half'),$year) . '">' . $this->getLang('first_half') . '</a></p>';
+            if (isset($data_year['second'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($conf['lang'] . '_' . 'url_second_half'),$year) . '">' . $this->getLang('second_half') . '</a></p>';
+            if (isset($data_year['final'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($conf['lang'] . '_' . 'url_final'),$year) . '">' . $this->getLang('final') . '</a></p>';
 
             // Series in list
             $renderer->doc .= '<ul>';
             foreach ($data_year['series'] as $series => $data_year_series) {
-                $renderer->doc .= '<li><a href="' . sprintf($this->getConf('url_series'),$year, $series) . '">' . sprintf($this->getLang('series'),$series) . '</a></li>';
+                $renderer->doc .= '<li><a href="' . sprintf($this->getConf($conf['lang'] . '_' . 'url_series'),$year, $series) . '">' . sprintf($this->getLang('series'),$series) . '</a></li>';
             }
             $renderer->doc .= '</ul>';
 
