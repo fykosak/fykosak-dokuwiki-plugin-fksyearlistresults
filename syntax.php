@@ -52,7 +52,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
         global $conf;
 
         // Search all pages
-        search($search_results, $conf['datadir'], 'search_allpages', array(), '', -1);
+        search($search_results, $conf['datadir'], 'search_allpages', [], '', -1);
 
         // Extract data
         $data = [];
