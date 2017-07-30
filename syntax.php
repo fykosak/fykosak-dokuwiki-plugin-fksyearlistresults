@@ -74,7 +74,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
         // Order data
         ksort($data, SORT_NATURAL | SORT_FLAG_CASE);
 
-        return $data;
+        return array_reverse($data, true);
     }
 
     /**
