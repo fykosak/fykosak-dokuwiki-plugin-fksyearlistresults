@@ -7,7 +7,7 @@
 
 
 $meta['cs_id_filter'] = array('string');
-$meta['en_filter'] = array('string');
+$meta['en_id_filter'] = array('string');
 
 $meta['cs_url_first_half'] = array('string');
 $meta['cs_id_first_half'] = array('string');
