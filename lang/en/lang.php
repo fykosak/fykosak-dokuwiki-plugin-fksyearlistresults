@@ -5,12 +5,8 @@
  * @author Štěpán Stenchlák <stenchlak@fykos.cz>
  */
 
-// menu entry for admin plugins
-// $lang['menu'] = 'Your menu entry';
-
-// custom language strings for the plugin
-// $lang['fixme'] = 'FIXME';
-
-
-
-//Setup VIM: ex: et ts=4 :
+$lang['title'] = 'Year %d';
+$lang['first_half'] = 'Results of the first semester';
+$lang['second_half'] = 'Results of the second semester';
+$lang['final'] = 'Final results';
+$lang['series'] = 'Series %d';
