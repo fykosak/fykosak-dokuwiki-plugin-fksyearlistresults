@@ -108,6 +108,7 @@ class syntax_plugin_fksyearlistresults extends DokuWiki_Syntax_Plugin {
 
             // Title
             $renderer->doc .= '<h2>' . sprintf($this->getLang('title'),$year) . '</h2>';
+            $renderer->doc .= '<h2>' . sprintf('%d/%d',($year+1986),($year+1987)) . '</h2>';
 
             if (isset($data_year['first'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($lang . '_' . 'url_first_half'),$year) . '">' . $this->getLang('first_half') . '</a></p>';
             if (isset($data_year['second'])) $renderer->doc .= '<p><a href="' . sprintf($this->getConf($lang . '_' . 'url_second_half'),$year) . '">' . $this->getLang('second_half') . '</a></p>';
